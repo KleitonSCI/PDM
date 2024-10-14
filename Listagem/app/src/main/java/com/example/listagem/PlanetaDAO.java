@@ -8,6 +8,8 @@ public class PlanetaDAO {
 
     public PlanetaDAO() {
         planetas = new ArrayList<>();
-        planetas.add(new Planeta("Mercurio",))
+        planetas.add(new Planeta("Terra",R.drawable.earth));
+        planetas.add(new Planeta("Marte",R.drawable.mars));
+
     }
 }

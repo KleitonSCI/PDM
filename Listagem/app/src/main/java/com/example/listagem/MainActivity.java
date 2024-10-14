@@ -3,12 +3,13 @@ package com.example.listagem;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     ListView listview;
-    String[] nomes = new String [] {"Picareta","Daniel","Patrício"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -17,8 +18,10 @@ public class MainActivity extends AppCompatActivity {
         listview=findViewById((R.id.listView));
         //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item1, android.R.id.text1,nomes);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,android.R.id.text2),nomes;
-        listview.setAdapter(adapter);
+        PlanetaDAO dao = new PlanetaDAO();
+        PlanetaAdapter planetaAdapter = new PlanetaAdapter(this,R.layout.planetas,dao.planetas);
+        listview.setAdapter(planetaAdapter);
+
 
 
     }
