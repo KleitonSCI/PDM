@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         listView=findViewById(R.id.ListView);
 
         database=openOrCreateDatabase("meubd",MODE_PRIVATE,null);
-        database.execSQL("CREATE TABLE IF NOT EXISTS dados (id INTEGER PRIMARY KEY AUTOINCREMENT,nome varchar,email varchar,data varchar); ");
+        database.execSQL("CREATE TABLE IF NOT EXISTS dados (id INTEGER PRIMARY KEY AUTOINCREMENT,nome varchar,email varchar,data date); ");
         carregarDados();
 
         //Definindo tratamento para evento de clique
@@ -51,10 +53,22 @@ public class MainActivity extends AppCompatActivity {
                 String nome = editNome.getText().toString();
                 String email = editEmail.getText().toString();
                 String dataN = editData.getText().toString();
+
+
+                SimpleDateFormat simpleDateDestino = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat simpleDateorigem = new SimpleDateFormat("dd/MM/yyyy");
+                String str;
+                try {
+
+                    str=simpleDateDestino.format(simpleDateorigem.parse(dataN));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+
                 ContentValues cv = new ContentValues();
                 cv.put("nome",nome);
                 cv.put("email",email);
-                cv.put("data",dataN);
+                cv.put("data",str);
                 long status = database.insert("dados",null,cv);
                 if(status>0){
                     Toast.makeText(getApplicationContext(),"Usuário inserido com sucesso!",Toast.LENGTH_LONG).show();
