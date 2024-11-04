@@ -39,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
         botao=findViewById(R.id.btnCadastrar);
         listView=findViewById(R.id.ListView);
 
+        database=openOrCreateDatabase("meubd",MODE_PRIVATE,null);
+        database.execSQL("CREATE TABLE IF NOT EXISTS dados (id INTEGER PRIMARY KEY AUTOINCREMENT,nome varchar,email varchar,data varchar); ");
+        carregarDados();
+
         //Definindo tratamento para evento de clique
         botao.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,11 +50,12 @@ public class MainActivity extends AppCompatActivity {
 
                 String nome = editNome.getText().toString();
                 String email = editEmail.getText().toString();
-
+                String dataN = editData.getText().toString();
                 ContentValues cv = new ContentValues();
                 cv.put("nome",nome);
                 cv.put("email",email);
-                long status = database.insert("pessoas",null,cv);
+                cv.put("data",dataN);
+                long status = database.insert("dados",null,cv);
                 if(status>0){
                     Toast.makeText(getApplicationContext(),"Usuário inserido com sucesso!",Toast.LENGTH_LONG).show();
                     carregarDados();
@@ -67,26 +72,26 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String nome,email;
+                String nome,email,data;
                 String id = String.valueOf(i+1);
 
-                Cursor cursor = database.rawQuery("select * from pessoas where id=?",new String[]{id});
+                Cursor cursor = database.rawQuery("select * from dados where id=?",new String[]{id});
                 cursor.moveToFirst();
                 nome = cursor.getString(1);
                 email = cursor.getString(2);
+                data = cursor.getString(3);
 
                 editNome.setText(nome);
                 editEmail.setText(email);
+                editData.setText(data);
 
             }
         });
 
-        database=openOrCreateDatabase("meubd",MODE_PRIVATE,null);
-        database.execSQL("CREATE TABLE IF NOT EXISTS pessoas (id INTEGER PRIMARY KEY AUTOINCREMENT,nome varchar,email varchar,dtnsc DATE); ");
-        carregarDados();
+
     }
     public void carregarDados(){
-        Cursor cursor = database.rawQuery("select * from pessoas",null);
+        Cursor cursor = database.rawQuery("select * from dados",null);
         cursor.moveToFirst();
         ArrayList<String> nomes = new ArrayList<>();
         while(!cursor.isAfterLast()){

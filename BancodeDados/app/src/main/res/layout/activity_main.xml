@@ -40,7 +40,7 @@
         android:layout_margin="10dp"
         android:ems="10"
         android:hint="ex:07/03/1990"
-        android:inputType="date|textPersonName"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textView3"
